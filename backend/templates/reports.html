@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+ 
+</head>
+<body>
+{% include "navbar.html" %}
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="content">
+
+      
+
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-icon blue">🛡</div>
+          <div class="stat-info">
+            <div class="stat-label">Total Threats</div>
+            <div class="stat-val" id="statTotalThreats">0</div>
+            <div class="stat-change">▲ From last week</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">⚠</div>
+          <div class="stat-info">
+            <div class="stat-label">Critical Threats</div>
+            <div class="stat-val" id="statCritical">0</div>
+            <div class="stat-change">▲ From last week</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">👤</div>
+          <div class="stat-info">
+            <div class="stat-label">Blocked IPs</div>
+            <div class="stat-val" id="statBlocked">0</div>
+            <div class="stat-change">▲ From last week</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon teal">📄</div>
+          <div class="stat-info">
+            <div class="stat-label">Total Logs</div>
+            <div class="stat-val" id="statTotalLogs">0</div>
+            <div class="stat-change">▲ From last week</div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="charts-row">
+        <div class="card">
+          <div class="card-title">Threats Over Time</div>
+          <div class="lc-outer">
+            <div class="y-labels" id="yLabels">
+              <span>50</span><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span>
+            </div>
+            <div class="line-chart-wrap">
+              <svg class="line-chart" viewBox="0 0 600 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" id="lineChartArea">
+        
+              </svg>
+            </div>
+          </div>
+          <div class="x-labels" id="xLabels">
+    
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Threats by Severity</div>
+          <div class="donut-wrap">
+            <div class="donut-svg-wrap">
+              <svg width="150" height="150" viewBox="0 0 150 150" id="donutSvg">
+        
+              </svg>
+              <div class="donut-center" id="donutCenter">
+                <div class="dc-num">0</div>
+                <div class="dc-lbl">Total</div>
+              </div>
+            </div>
+            <div class="donut-legend" id="donutLegend">
+      
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bottom-row">
+        <div class="card">
+          <div class="card-title">Top Threat Types</div>
+          <div id="threatTypes">
+    
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Top Attacker IPs</div>
+          <table class="ip-table">
+            <thead>
+              <tr>
+                <th>IP Address</th>
+                <th>Threat Count</th>
+              </tr>
+            </thead>
+            <tbody id="attackerIps">
+      
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title">System Summary</div>
+          <div class="sys-row">
+            <div class="sys-left"><span class="sys-icon">🌐</span> Monitoring Status</div>
+            <span class="sys-val green">Active</span>
+          </div>
+          <div class="sys-row">
+            <div class="sys-left"><span class="sys-icon">🔔</span> Last Threat Detected</div>
+            <span class="sys-val" id="lastThreatTime">-</span>
+          </div>
+          <div class="sys-row">
+            <div class="sys-left"><span class="sys-icon">⏱</span> Total Uptime</div>
+            <span class="sys-val">99.8%</span>
+          </div>
+          <div class="sys-row">
+            <div class="sys-left"><span class="sys-icon">💻</span> System Health</div>
+            <span class="sys-val green">Good</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="lower-row">
+        <div class="card">
+          <div class="card-title">Recent Threat Summary</div>
+          <table class="rt-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Total Threats</th>
+                <th>Critical</th>
+                <th>High</th>
+                <th>Medium</th>
+                <th>Low</th>
+              </tr>
+            </thead>
+            <tbody id="dailySummary">
+      
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Report Insights</div>
+          <div id="insights">
+    
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <script src="{{url_for('static', filename='js/reports.js')}}"></script>
+</body>
+</html>

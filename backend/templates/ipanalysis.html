@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ipanalysis.css') }}" />
+ 
+</head>
+<body>
+  {% include "navbar.html" %}
+
+  <div class="main">
+    <div class="page">
+      <div class="ph">
+        <h2>IP Analysis</h2>
+        <p>Analyze IP reputation and threat intelligence from real logs</p>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="ipInput" placeholder="Enter IP Address" value="192.168.1.105" />
+        <button class="btn-primary" onclick="analyzeIP()">Analyze IP</button>
+      </div>
+
+      <div class="result-grid">
+        <div class="ip-main-card">
+          <div>
+            <span class="ip-addr" id="dispIP">192.168.1.105</span>
+            <span class="sbadge mal" id="reputationBadge">Malicious</span>
+            <span class="risk" id="riskBadge">High Risk</span>
+            <div id="blockedStatus" style="display:none;margin-top:8px;font-size:12px;color:#f56565;"></div>
+          </div>
+          <div class="gauge-wrap">
+            <div class="gauge-lbl">Threat Score</div>
+            <div class="gauge-cont">
+              <canvas id="gaugeCanvas" width="160" height="100"></canvas>
+              <div class="gauge-val" id="gaugeVal">85<span>/100</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-card">
+          <div class="meta-row"><span class="meta-lbl">Country</span><span class="meta-val" id="metaCountry">Local Network</span></div>
+          <div class="meta-row"><span class="meta-lbl">ISP</span><span class="meta-val" id="metaISP">Internal</span></div>
+          <div class="meta-row"><span class="meta-lbl">Last Seen</span><span class="meta-val" id="metaLastSeen">-</span></div>
+          <div class="meta-row"><span class="meta-lbl">Total Threats</span><span class="meta-val tc" id="metaThreats">0</span></div>
+          <div class="meta-row"><span class="meta-lbl">Reputation</span><span class="meta-val rep" id="metaReputation">-</span></div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card">
+          <h3>Recent Activity</h3>
+          <ul class="alist" id="activityList">
+            <li><span class="dot-r"></span>Loading...</li>
+          </ul>
+        </div>
+        <div class="detail-card">
+          <h3>Risk Factors</h3>
+          <ul class="alist" id="riskList">
+            <li><span class="dot-r"></span>Loading...</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{url_for('static', filename='js/ipanalysis.js')}}"></script>
+</body>
+</html>

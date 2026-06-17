@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='css/livemonitor.css')}}">
+ 
+</head>
+<body>
+  {% include "navbar.html" %}
+
+  <div class="main">
+    <div class="page">
+      <div class="ph">
+        <h2>Live Monitor</h2>
+        <p>Real-time network traffic capturing and analysis</p>
+      </div>
+
+      <div class="stats">
+        <div class="scard">
+          <div class="slbl">Packets / Sec</div>
+          <div class="sval" id="pktVal">0</div><canvas class="mini-c" id="m1"></canvas>
+        </div>
+        <div class="scard">
+          <div class="slbl">Bytes / Sec</div>
+          <div class="sval" id="bytVal">0 MB</div><canvas class="mini-c" id="m2"></canvas>
+        </div>
+        <div class="scard">
+          <div class="slbl">Active Connections</div>
+          <div class="sval" id="connVal">0</div><canvas class="mini-c" id="m3"></canvas>
+        </div>
+        <div class="scard">
+          <div class="slbl">TCP Connections</div>
+          <div class="sval" id="tcpVal">0</div><canvas class="mini-c" id="m4"></canvas>
+        </div>
+        <div class="scard">
+          <div class="slbl">UDP Connections</div>
+          <div class="sval" id="udpVal">0</div><canvas class="mini-c" id="m5"></canvas>
+        </div>
+      </div>
+
+      <div class="middle">
+        <div class="card">
+          <div class="card-hdr">
+            <h3>Live Traffic Graph</h3>
+            <select class="sm">
+              <option>Real-time</option>
+              <option>1 min</option>
+              <option>5 min</option>
+            </select>
+          </div>
+          <canvas id="liveChart" height="130"></canvas>
+        </div>
+        <div class="proto-card">
+          <h3>Protocol Distribution</h3>
+          <canvas id="protoChart" width="170" height="170"></canvas>
+          <div class="legend">
+            <div class="leg-item"><span class="ldot tcp"></span>TCP<strong>60%</strong></div>
+            <div class="leg-item"><span class="ldot udp"></span>UDP<strong>25%</strong></div>
+            <div class="leg-item"><span class="ldot icmp"></span>ICMP<strong>10%</strong></div>
+            <div class="leg-item"><span class="ldot oth"></span>Others<strong>5%</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="card">
+          <h3>Live Traffic Logs</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Protocol</th>
+                <th>Length</th>
+                <th>Info</th>
+              </tr>
+            </thead>
+            <tbody id="logBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Top Talkers</h3>
+          <div class="ttabs">
+            <button class="ttab active" onclick="switchTab(this)">Source IPs</button>
+            <button class="ttab" onclick="switchTab(this)">Destination IPs</button>
+          </div>
+          <div id="talkerList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{url_for('static', filename='js/livemonitor.js')}}"></script>
+</body>
+</html>

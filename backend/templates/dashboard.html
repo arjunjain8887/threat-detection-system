@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+ 
+</head>
+<body>
+
+  {% include "navbar.html" %}
+
+
+  <div class="stat-grid">
+    <a href="/livemonitor" class="stat-card-link">
+      <div class="stat-card c-blue">
+        <div class="stat-label">Total Traffic</div>
+        <div id="traffic-val" class="stat-value">0 <sub>Events</sub></div>
+        <div class="stat-change up">▲ Live</div>
+        <div class="mini-canvas-wrap"><canvas id="c-traffic"></canvas></div>
+      </div>
+    </a>
+    <a href="/threats" class="stat-card-link">
+      <div class="stat-card c-red">
+        <div class="stat-label">Threats Detected</div>
+        <div class="stat-value" id="threats-val">0</div>
+        <div class="stat-change down">▲ From MySQL</div>
+        <div class="mini-canvas-wrap"><canvas id="c-threats"></canvas></div>
+      </div>
+    </a>
+    <a href="/alerts" class="stat-card-link">
+      <div class="stat-card c-orange">
+        <div class="stat-label">Active Alerts</div>
+        <div class="stat-value" id="alerts-val">0</div>
+        <div class="stat-change down">▲ From MySQL</div>
+        <div class="mini-canvas-wrap"><canvas id="c-alerts"></canvas></div>
+      </div>
+    </a>
+    <a href="/ipanalysis" class="stat-card-link">
+      <div class="stat-card c-green">
+        <div class="stat-label">Blocked IPs</div>
+        <div class="stat-value" id="blocked-val">0</div>
+        <div class="stat-change up">▲ From MySQL</div>
+        <div class="mini-canvas-wrap"><canvas id="c-blocked"></canvas></div>
+      </div>
+    </a>
+  </div>
+
+
+  <div class="bottom-grid">
+
+  
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title"><a href="/livemonitor">Traffic Overview</a></span>
+        <div class="legend-row">
+          <div class="leg"><div class="leg-dot" style="background:#3b82f6"></div>Incoming</div>
+          <div class="leg"><div class="leg-dot" style="background:#a855f7"></div>Outgoing</div>
+        </div>
+      </div>
+      <div class="chart-wrap traffic-chart-wrap">
+        <canvas id="c-traffic-overview"></canvas>
+      </div>
+      <div class="x-axis">
+        <span class="x-tick">00:00</span>
+        <span class="x-tick">04:00</span>
+        <span class="x-tick">08:00</span>
+        <span class="x-tick">12:00</span>
+        <span class="x-tick">16:00</span>
+        <span class="x-tick">20:00</span>
+        <span class="x-tick">24:00</span>
+      </div>
+    </div>
+
+  
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title"><a href="/threats">Threats by Severity</a></span>
+      </div>
+      <div class="donut-area">
+        <div class="donut-wrap">
+          <canvas id="c-donut"></canvas>
+          <div class="donut-center-label">
+            <div class="donut-num" id="donut-total">0</div>
+            <div class="donut-sub">Total</div>
+          </div>
+        </div>
+        <div class="sev-list">
+          <div class="sev-item">
+            <div class="sev-dot" style="background:#ef4444"></div>
+            <span class="sev-label">Critical</span><span class="sev-count" id="crit-count">0</span>
+          </div>
+          <div class="sev-item">
+            <div class="sev-dot" style="background:#f97316"></div>
+            <span class="sev-label">High</span><span class="sev-count" id="high-count">0</span>
+          </div>
+          <div class="sev-item">
+            <div class="sev-dot" style="background:#eab308"></div>
+            <span class="sev-label">Medium</span><span class="sev-count" id="med-count">0</span>
+          </div>
+          <div class="sev-item">
+            <div class="sev-dot" style="background:#22c55e"></div>
+            <span class="sev-label">Low</span><span class="sev-count" id="low-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="panel" id="alerts-panel">
+      <div class="panel-header">
+        <span class="panel-title">Recent Alerts</span>
+        <span class="view-all"><a href="/alerts">View All</a></span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

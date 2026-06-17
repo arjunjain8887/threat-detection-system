@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logs</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='./css/logs.css') }}" />
+ 
+</head>
+<body>
+
+  {% include "navbar.html" %}
+
+  <div class="main">
+  <div class="page">
+    <div class="filters">
+      <select id="typeFilter" onchange="filterLogs()">
+        <option value="">All Log Types</option>
+        <option value="Security">Security</option>
+        <option value="Authentication">Authentication</option>
+        <option value="Network">Network</option>
+        <option value="System">System</option>
+      </select>
+      <select id="sevFilter" onchange="filterLogs()">
+        <option value="">All Severity</option>
+        <option value="Critical">Critical</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Info">Info</option>
+      </select>
+      <select>
+        <option>May 24, 2024 – May 31, 2024</option>
+      </select>
+      <button class="btn-export" onclick="exportLogs()">Export</button>
+    </div>
+
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Search logs..." oninput="filterLogs()" />
+      <span class="log-count">Showing <span id="rowCount">5</span> entries</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Log Type</th>
+            <th>Message</th>
+            <th>Source</th>
+            <th>Severity</th>
+          </tr>
+        </thead>
+        <tbody id="logsBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button class="pbtn active" onclick="setPage(this)">1</button>
+      <button class="pbtn" onclick="setPage(this)">2</button>
+      <button class="pbtn" onclick="setPage(this)">3</button>
+      <button class="pbtn" onclick="setPage(this)">4</button>
+      <button class="pbtn" onclick="setPage(this)">5</button>
+      <button class="pbtn next" onclick="setPage(this)">Next</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='./js/logs.js') }}"></script>
+</body>
+</html>

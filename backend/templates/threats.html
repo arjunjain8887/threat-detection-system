@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threats</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/threat.css') }}">
+ 
+</head>
+<body>
+  {% include "navbar.html" %}
+
+  <div class="main">
+    <div class="content">
+      <!-- Threats List Sidebar + Detail View -->
+      <div class="threats-layout">
+
+        <!-- Left: Threats List -->
+        <div class="threats-sidebar">
+          <div class="sidebar-header">
+            <h3>Detected Threats</h3>
+            <span class="threat-count" id="threatCount">0</span>
+          </div>
+          <div class="threats-list" id="threatsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Right: Threat Detail -->
+        <div class="threat-detail">
+          <div class="card">
+            <div class="card-title">Threat Information</div>
+            <table class="info-table" id="threatInfoTable">
+              <tr><td>Threat Name</td><td id="tName">Select a threat</td></tr>
+              <tr><td>Source IP</td><td id="tSrcIp">-</td></tr>
+              <tr><td>Destination IP</td><td id="tDstIp">-</td></tr>
+              <tr><td>Protocol</td><td id="tProto">-</td></tr>
+              <tr><td>Port</td><td id="tPort">-</td></tr>
+              <tr>
+                <td>Severity</td>
+                <td id="tSeverity"><span class="badge">-</span></td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td id="tStatus"><span class="badge badge-new">New</span></td>
+              </tr>
+              <tr><td>Detected At</td><td id="tTime">-</td></tr>
+              <tr><td>Description</td><td id="tDesc">-</td></tr>
+              <tr>
+                <td>Action</td>
+                <td>
+                  <button class="btn-action btn-block" id="blockBtn" onclick="blockCurrentIp()" disabled>BLOCK IP</button>
+                  <button class="btn-action btn-unblock" id="unblockBtn" onclick="unblockCurrentIp()" disabled style="display:none;">UNBLOCK IP</button>
+                  <span id="blockStatus" style="margin-left:10px;font-size:12px;color:#68d391;"></span>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="{{url_for('static', filename='js/threat.js')}}"></script>
+</body>
+</html>
