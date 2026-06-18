@@ -6,7 +6,10 @@ from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE = os.path.join(SCRIPT_DIR, "backend", "logs", "access.log")
-SERVER_URL = "http://127.0.0.1:5000/backend/logs"
+
+# Change this to your live Render URL after deployment
+# Example: "https://your-app-name.onrender.com/backend/logs"
+SERVER_URL = os.environ.get("SERVER_URL", "https://threat-detection-system-td4d.onrender.com/backend/logs")
 
 sent_lines = set()
 
@@ -70,11 +73,18 @@ def parse_log_line(line):
     return log_data
 
 def send_to_server(log_data):
-    response = requests.post(SERVER_URL, json=log_data, timeout=10)
-    if response.status_code == 200:
-        print(f"Sent: {log_data['message']}")
-    else:
-        print(f"Failed: {response.status_code}")
+    try:
+        response = requests.post(SERVER_URL, json=log_data, timeout=10)
+        if response.status_code == 200:
+            print(f"Sent: {log_data['message']}")
+        else:
+            print(f"Failed: {response.status_code}")
+    except requests.exceptions.ConnectionError:
+        print(f"Connection failed. Is the server running at {SERVER_URL}?")
+    except requests.exceptions.Timeout:
+        print(f"Skipped (too slow): {log_data['message']}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 def process_logs(lines):
     for line in lines:
@@ -90,15 +100,13 @@ def process_logs(lines):
         parsed = parse_log_line(line)
 
         if parsed:
-            try:
-                send_to_server(parsed)
-            except requests.exceptions.Timeout:
-                print(f"Skipped (too slow): {parsed['message']}")
+            send_to_server(parsed)
             sent_lines.add(line)
 
         time.sleep(0.2)
 
 print("Agent started. Press Ctrl+C to stop.")
+print(f"Sending logs to: {SERVER_URL}")
 
 with open(LOG_FILE, "r") as f:
     lines = f.readlines()
