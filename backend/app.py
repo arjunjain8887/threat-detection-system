@@ -1,5 +1,7 @@
+import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
-import mysql.connector
 from datetime import datetime, timedelta
 from alert import send_alert
 import re
@@ -8,16 +10,10 @@ import random
 
 app = Flask(__name__)
 
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "root",
-    "database": "userlgn",
-    "use_pure": True
-}
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://neondb_owner:npg_5IWQbLoHM6rc@ep-lively-mode-ahtnsi31.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require')
 
 def get_db():
-    conn = mysql.connector.connect(**DB_CONFIG)
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 def init_db():
@@ -26,7 +22,7 @@ def init_db():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             usernamee VARCHAR(100) UNIQUE NOT NULL,
             passwordd VARCHAR(100) NOT NULL
         )
@@ -34,7 +30,7 @@ def init_db():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS logs (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             timestamp VARCHAR(50) NOT NULL,
             log_type VARCHAR(50) NOT NULL,
             message TEXT NOT NULL,
@@ -45,7 +41,7 @@ def init_db():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS blocked_ips (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             ip_address VARCHAR(50) UNIQUE NOT NULL,
             threat_id INT,
             reason TEXT,
@@ -121,7 +117,7 @@ def dashboard_stats():
     cursor.execute("SELECT COUNT(*) FROM logs WHERE severity = 'CRITICAL'")
     alerts = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM logs WHERE message LIKE '%403%' OR message LIKE '%Forbidden%'")
+    cursor.execute("SELECT COUNT(*) FROM logs WHERE message LIKE '%%403%%' OR message LIKE '%%Forbidden%%'")
     blocked = cursor.fetchone()[0]
 
     cursor.close()
@@ -256,7 +252,7 @@ def get_threat_detail(threat_id):
     elif "HTTP" in msg.upper():
         proto = "HTTP"
 
-    ip_pattern = r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+    ip_pattern = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b'
     ips = re.findall(ip_pattern, msg)
     dst_ip = ips[1] if len(ips) > 1 else (ips[0] if ips else "192.168.1.1")
     if dst_ip == threat[4]:
@@ -739,10 +735,10 @@ def live_stats():
     cursor.execute("SELECT COUNT(DISTINCT source_ip) FROM logs")
     active_conn = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM logs WHERE message LIKE '%TCP%' OR message LIKE '%connection%' OR message LIKE '%SYN%' OR message LIKE '%ACK%'")
+    cursor.execute("SELECT COUNT(*) FROM logs WHERE message LIKE '%%TCP%%' OR message LIKE '%%connection%%' OR message LIKE '%%SYN%%' OR message LIKE '%%ACK%%'")
     tcp_conn = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM logs WHERE message LIKE '%UDP%' OR message LIKE '%DNS%' OR message LIKE '%ICMP%'")
+    cursor.execute("SELECT COUNT(*) FROM logs WHERE message LIKE '%%UDP%%' OR message LIKE '%%DNS%%' OR message LIKE '%%ICMP%%'")
     udp_conn = cursor.fetchone()[0]
 
     cursor.close()
@@ -826,7 +822,7 @@ def live_logs():
         if not info:
             info = log[4]
 
-        ip_pattern = r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+        ip_pattern = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b'
         ips = re.findall(ip_pattern, msg)
         dst_ip = ips[0] if ips else "192.168.1.1"
 
@@ -871,7 +867,7 @@ def live_top_talkers():
     cursor.close()
     db.close()
 
-    ip_pattern = r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+    ip_pattern = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b'
 
     dst_counts = {}
     for msg, cnt in messages:
