@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
 from datetime import datetime, timedelta
-from alert import send_alert
+from backend.alert import send_alert
 import re
 from collections import defaultdict, Counter
 import random
