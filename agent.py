@@ -9,7 +9,7 @@ LOG_FILE = os.path.join(SCRIPT_DIR, "backend", "logs", "access.log")
 
 # Change this to your live Render URL after deployment
 # Example: "https://your-app-name.onrender.com/backend/logs"
-SERVER_URL = os.environ.get("SERVER_URL", "https://threat-detection-system-td4d.onrender.com/backend/logs")
+SERVER_URL = os.environ.get("SERVER_URL", "https://threat-detection-system-2.onrender.com//backend/logs")
 
 sent_lines = set()
 
